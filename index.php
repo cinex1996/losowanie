@@ -1,6 +1,8 @@
+
+
 <?php
 session_start();
-$pol=mysqli_connect('localhost','root','','los');
+$pol=mysqli_connect('localhost','root','','losowanie');
 $class=new mk;
 if(isset($_REQUEST['btn_submit']))
 switch($_REQUEST['btn_submit'])
@@ -27,7 +29,9 @@ class mk
 	function wczytywanie()
 	{
 		global $pol;
-		switch ($_POST['wybór1']) {
+$choice=$_POST['wybór1'];
+$choice=htmlentities($choice,ENT_QUOTES,"UTF-8");
+		switch ($choice) {
 			case 'Pieniądze':
 				$pyt="SELECT * FROM los WHERE wybor='Pieniądze' ORDER BY RAND() limit 1";
           $rez=mysqli_query($pol,$pyt);
@@ -106,16 +110,19 @@ class mk
 function dodaj()
 {
 	global $pol;
-	    if(strlen($_POST['text'])==0)
+	$choice=$_POST['text'];
+	$choice=htmlentities($choice,ENT_QUOTES,"UTF-8");
+	    if(strlen($choice)==0)
 	    {
              $_SESSION['cyt']="<p style='color:red;'>Podaj cytat</p>";
 	    }
 	    else
 	    {
-		switch ($_POST['wybór']) {
+
+		switch ($choice) {
 			case 'Pieniądze':
 			
-			$pyt="INSERT INTO los (cytat,wybor) VALUES ('".$_POST['text']."','Pieniądze')";
+			$pyt=sprintf("INSERT INTO los (cytat,wybor) VALUES ('%s','Pieniądze')",mysqli_real_escape_string($pol,$choice));
 			$rez=mysqli_query($pol,$pyt);
 			if(!$rez)
 			{
@@ -124,7 +131,7 @@ function dodaj()
 		
 				break;
 			case 'Sport':
-			$pyt="INSERT INTO los (cytat,wybor) VALUES ('".$_POST['text']."','Sport')";
+			$pyt=sprintf("INSERT INTO los (cytat,wybor) VALUES ('%s','Sport')",mysqli_real_escape_string($pol,$choice));
 			$rez=mysqli_query($pol,$pyt);
 			if(!$rez)
 			{
@@ -132,7 +139,7 @@ function dodaj()
 			}
 			break;
 			case 'Motywacja':
-			$pyt="INSERT INTO los (cytat,wybor) VALUES ('".$_POST['text']."','Motywacja')";
+			$pyt=sprintf("INSERT INTO los (cytat,wybor) VALUES ('%s','Motywacja')",mysqli_real_escape_string($pol,$choice));
 			$rez=mysqli_query($pol,$pyt);
 			if(!$rez)
 			{
@@ -140,7 +147,7 @@ function dodaj()
 			}
 			break;
 			case 'Nauka':
-			$pyt="INSERT INTO los (cytat,wybor) VALUES ('".$_POST['text']."','Nauka')";
+			$pyt=sprintf("INSERT INTO los (cytat,wybor) VALUES ('%s','Nauka')",mysqli_real_escape_string($pol,$choice));
 			$rez=mysqli_query($pol,$pyt);
 			if(!$rez)
 			{
